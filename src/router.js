@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Ticket from './views/Ticket.vue'
 
 Vue.use(Router)
 
@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/ticket',
       name: 'Ticket',
-      component: Home
+      component: Ticket
     },
     {
       path: '/about',
