@@ -3,44 +3,29 @@
       <v-card
         class="mx-auto"
       >
-        <v-img
-          class="white--text"
-          height="200px"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-        >
-          <v-card-title class="align-end fill-height">Top 10 Australian beaches</v-card-title>
-        </v-img>
 
         <v-card-text>
-          <span>Number 10</span><br>
-          <span class="text--primary">
-            <span>Whitehaven Beach</span><br>
-            <span>Whitsunday Island, Whitsunday Islands</span>
-          </span>
+          <v-overflow-btn
+          class="my-2"
+          :items="dropdown_font"
+          label="Amount"
+          target="#dropdown-example"
+        ></v-overflow-btn>
         </v-card-text>
-
-        <v-card-actions>
-          <v-btn
-            text
-            color="orange"
-          >
-            Share
-          </v-btn>
-          <v-btn
-            text
-            color="orange"
-          >
-            Explore
-          </v-btn>
-        </v-card-actions>
+        <bottomNav/>
       </v-card>
   </v-flex>
 </template>
 
 <script>
+import bottomNav from '@/components/bottomNav.vue'
+
 export default {
   data: () => ({
-    e6: 0
-  })
+    dropdown_font: ['50 USD', '100 USD', '150 USD', '200 USD']
+  }),
+  components: {
+    bottomNav
+  }
 }
 </script>
