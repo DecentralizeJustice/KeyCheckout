@@ -2,7 +2,7 @@
   <div>
     <v-toolbar>
 
-      <v-toolbar-title>Decentralize Justice</v-toolbar-title>
+      <v-toolbar-title>Distributed Keys</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
 
@@ -29,7 +29,7 @@ export default {
   data: () => ({
     pages: [
       { title: 'Home', link: 'https://www.multisigcrypto.com/' },
-      { title: 'Test', link: '/' },
+      { title: 'Buy', link: '/' },
       { title: 'About', link: 'https://www.multisigcrypto.com/about' }
     ],
     current: 'Test'

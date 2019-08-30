@@ -2,7 +2,7 @@
   <v-app>
     <toolBar app/>
     <v-content>
-      <router-view></router-view>
+      <router-view/>
     </v-content>
   </v-app>
 </template>
@@ -12,7 +12,6 @@ import toolBar from '@/components/toolBar.vue'
 export default {
   name: 'App',
   data: () => ({
-    //
   }),
   components: {
     toolBar
