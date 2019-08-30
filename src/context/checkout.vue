@@ -10,7 +10,9 @@
           >
 
       <component v-bind:hardwareOptions="hardwareOptions" v-bind:is="currentMain"
-      v-on:updatePlanOptions="updateHardware"></component>
+      v-on:updatePlanOptions="updateHardware" v-on:updateneededDevices="updateneededDevices"
+      v-bind:neededSigs="neededSigs">
+      </component>
 
       <bottomNav v-on:change="updateStep" v-bind:currentSection="currentSection"
       v-bind:continueDisabled='continueDisabled'/>
@@ -29,7 +31,8 @@ export default {
     componentList: ['hardware', 'plan', 'confirm', 'pay'],
     currentSection: 0,
     hardwareOptions: {
-    }
+    },
+    neededSigs: null
   }),
   components: {
     stepper,
@@ -40,6 +43,11 @@ export default {
       switch (this.currentSection) {
         case 0:
           if (Object.keys(this.hardwareOptions).length !== 0) {
+            return false
+          }
+          break
+        case 1:
+          if (this.neededSigs !== null) {
             return false
           }
           break
@@ -65,6 +73,10 @@ export default {
     },
     updateHardware (newHardwareOptions) {
       this.hardwareOptions = newHardwareOptions
+      this.neededSigs = null
+    },
+    updateneededDevices (newSigNeeded) {
+      this.neededSigs = newSigNeeded
     }
   }
 }
