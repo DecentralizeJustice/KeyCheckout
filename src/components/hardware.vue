@@ -2,9 +2,6 @@
 
       <v-flex xs10 offset-xs1>
         <v-card-text>
-          <v-alert type="error" v-if="!enoughDevices && allChosen">
-            {{this.minAmountWarning}}
-          </v-alert>
           <p class="mb-5 headline">What Hardware do you plan to Use?</p>
 
           <v-select
@@ -46,12 +43,11 @@
 export default {
   props: ['hardwareOptions'],
   data: () => ({
-    keyHardwareAmount: 10,
+    totalkeysAllowed: 8,
     hardwareWallets: null,
     hardwareWalletSupportingDesktop: null,
     desktopKeys: null,
-    phonesOrTabletKeys: null,
-    minAmountWarning: 'You Must Use Atleast 2 Key Holding Devices'
+    phonesOrTabletKeys: null
   }),
   created () {
     if (Object.keys(this.hardwareOptions).length !== 0) {
@@ -64,41 +60,35 @@ export default {
   methods: {
   },
   computed: {
-    availableKeyHardware: function () {
-      let availKeys = this.keyHardwareAmount - this.hardwareWallets -
-      this.desktopKeys - this.phonesOrTabletKeys
+    availableSoftwareKeys: function () {
+      let availKeys = this.hardwareWallets -
+      this.desktopKeys - this.phonesOrTabletKeys - 1
       return availKeys
-    },
-    hardwareWalletSupportingDesktopMin: function () {
-      if (this.hardwareWallets !== 0 || this.hardwareWallets === null) {
-        return 1
-      }
-      return 0
     },
     hardwareWalletdropdown: function () {
       let options = []
-      for (let i = 0; i < this.availableKeyHardware + this.hardwareWallets + 1; i++) {
+      for (let i = 2; i < this.totalkeysAllowed + this.hardwareWallets + 1; i++) {
         options.push(i)
       }
       return options
     },
     hardwareWalletSupportingDropdown: function () {
       let options = []
-      for (let i = this.hardwareWalletSupportingDesktopMin; i < this.hardwareWallets + 1; i++) {
+      for (let i = 1; i < this.hardwareWallets + 1; i++) {
         options.push(i)
       }
       return options
     },
     desktopDropdown: function () {
       let options = []
-      for (let i = 0; i < this.availableKeyHardware + this.desktopKeys + 1; i++) {
+      for (let i = 0; i < this.availableSoftwareKeys + this.desktopKeys + 1; i++) {
         options.push(i)
       }
       return options
     },
     phoneAndTabletDropdown: function () {
       let options = []
-      for (let i = 0; i < this.availableKeyHardware + this.phonesOrTabletKeys + 1; i++) {
+      for (let i = 0; i < this.availableSoftwareKeys + this.phonesOrTabletKeys + 1; i++) {
         options.push(i)
       }
       return options
@@ -121,11 +111,6 @@ export default {
       }
       return true
     },
-    enoughDevices: function () {
-      if (this.hardwareWallets + this.desktopKeys + this.phonesOrTabletKeys) {
-        return true
-      } return false
-    },
     allChosen: function () {
       if (this.hardwareWallets !== null && this.desktopKeys !== null &&
         this.phonesOrTabletKeys !== null &&
@@ -134,9 +119,10 @@ export default {
       } return false
     },
     validPlan: function () {
-      if (this.enoughDevices && this.allChosen) {
+      if (this.allChosen) {
         return true
       }
+      this.$emit('updatePlanOptions', {})
       return false
     }
   },

@@ -30,6 +30,7 @@ export default {
     pages: [
       { title: 'Home', link: 'https://www.multisigcrypto.com/' },
       { title: 'Buy', link: '/' },
+      { title: 'Tools', link: '/' },
       { title: 'About', link: 'https://www.multisigcrypto.com/about' }
     ],
     current: 'Test'

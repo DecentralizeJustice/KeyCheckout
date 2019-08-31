@@ -2,15 +2,13 @@
 
       <v-flex xs8 offset-xs2>
         <v-card-text>
-
-          <p class="mb-5 headline">How Many Devices Will You Require to Send Money?</p>
-
-          <v-select
-          class="my-2"
-          :items="neededSigsDropDown"
-          label="Needed Devices"
-          v-model="localneededSigs"
-          ></v-select>
+          <p class="mb-5 headline">How Would You Like To Pay?</p>
+          <p class="mb-5 title">Bitcoin</p>
+        <v-overflow-btn
+        class="my-2"
+        :items="dropdown_font"
+        label="Phones and Tablets"
+      ></v-overflow-btn>
         </v-card-text>
         </v-flex>
 
@@ -19,29 +17,12 @@
 <script>
 export default {
   data: () => ({
-    totalKeys: null,
-    localneededSigs: null
-
+    dropdown_font: []
   }),
-  computed: {
-    neededSigsDropDown () {
-      let options = []
-      for (let i = 1; i < this.totalKeys + 1; i++) {
-        options.push(i)
-      }
-      return options
-    }
-  },
-  watch: {
-    localneededSigs (newValue) {
-      this.$emit('updateneededDevices', newValue)
-    }
-  },
   created () {
-    this.totalKeys = this.hardwareOptions.hardwareWallets +
-    this.hardwareOptions.desktopKeys +
-    this.hardwareOptions.phonesOrTabletKeys
-  },
-  props: ['neededSigs', 'hardwareOptions']
+    for (var i = 2; i < 16; i++) {
+      this.dropdown_font.push(i)
+    }
+  }
 }
 </script>

@@ -28,7 +28,7 @@ import stepper from '@/components/stepper.vue'
 import bottomNav from '@/components/bottomNav.vue'
 export default {
   data: () => ({
-    componentList: ['hardware', 'plan', 'confirm', 'pay'],
+    componentList: ['hardware', 'overview', 'plan', 'pay'],
     currentSection: 0,
     hardwareOptions: {
     },
