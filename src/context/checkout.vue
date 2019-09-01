@@ -11,7 +11,7 @@
 
       <component v-bind:hardwareOptions="hardwareOptions" v-bind:is="currentMain"
       v-on:updatePlanOptions="updateHardware" v-on:updateneededDevices="updateneededDevices"
-      v-bind:neededSigs="neededSigs">
+      v-bind:neededDevices="neededDevices">
       </component>
 
       <bottomNav v-on:change="updateStep" v-bind:currentSection="currentSection"
@@ -28,11 +28,11 @@ import stepper from '@/components/stepper.vue'
 import bottomNav from '@/components/bottomNav.vue'
 export default {
   data: () => ({
-    componentList: ['hardware', 'overview', 'plan', 'pay'],
+    componentList: ['hardware', 'neededDevices', 'confirm', 'pay'],
     currentSection: 0,
     hardwareOptions: {
     },
-    neededSigs: null
+    neededDevices: null
   }),
   components: {
     stepper,
@@ -47,9 +47,12 @@ export default {
           }
           break
         case 1:
-          if (this.neededSigs !== null) {
+          if (this.neededDevices !== null) {
             return false
           }
+          break
+        case 2:
+          return false
           break
         default:
           return true
@@ -73,10 +76,10 @@ export default {
     },
     updateHardware (newHardwareOptions) {
       this.hardwareOptions = newHardwareOptions
-      this.neededSigs = null
+      this.neededDevices = null
     },
     updateneededDevices (newSigNeeded) {
-      this.neededSigs = newSigNeeded
+      this.neededDevices = newSigNeeded
     }
   }
 }

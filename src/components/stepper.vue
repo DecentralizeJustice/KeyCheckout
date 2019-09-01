@@ -3,7 +3,7 @@
       <v-stepper-header>
         <v-stepper-step step="1" :complete='complete(0)' >Hardware</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete='complete(1)' >Overview</v-stepper-step>
+        <v-stepper-step step="2" :complete='complete(1)' >Needed Devices</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step step="3" :complete='complete(2)'>Confirm</v-stepper-step>
         <v-divider></v-divider>

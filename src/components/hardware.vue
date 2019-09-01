@@ -2,6 +2,9 @@
 
       <v-flex xs10 offset-xs1>
         <v-card-text>
+          <v-alert type="error" v-if="!minDevicesAchieved && allChosen">
+            {{minDevicesWarning}}
+          </v-alert>
           <p class="mb-5 headline">What Hardware do you plan to Use?</p>
 
           <v-select
@@ -44,6 +47,8 @@ export default {
   props: ['hardwareOptions'],
   data: () => ({
     totalkeysAllowed: 8,
+    minKeyDevices: 3,
+    minDevicesWarning: 'You Must Use Atleast 3 Devices',
     hardwareWallets: null,
     hardwareWalletSupportingDesktop: null,
     desktopKeys: null,
@@ -112,30 +117,37 @@ export default {
       return true
     },
     allChosen: function () {
-      if (this.hardwareWallets !== null && this.desktopKeys !== null &&
-        this.phonesOrTabletKeys !== null &&
-        this.hardwareWalletSupportingDesktop !== null) {
+      if (this.hardwareWallets !== null &&
+        this.hardwareWalletSupportingDesktop !== null &&
+        this.desktopKeys !== null &&
+        this.phonesOrTabletKeys !== null
+      ) {
+        return true
+      } return false
+    },
+    minDevicesAchieved: function () {
+      if (this.hardwareWallets + this.desktopKeys +
+        this.phonesOrTabletKeys >= this.minKeyDevices) {
         return true
       } return false
     },
     validPlan: function () {
-      if (this.allChosen) {
-        return true
+      if (this.allChosen && this.minDevicesAchieved) {
+        let hardwareOptionsValid = {
+          hardwareWallets: this.hardwareWallets,
+          desktopKeys: this.desktopKeys,
+          phonesOrTabletKeys: this.phonesOrTabletKeys,
+          hardwareWalletSupportingDesktop: this.hardwareWalletSupportingDesktop
+        }
+        return hardwareOptionsValid
       }
-      this.$emit('updatePlanOptions', {})
-      return false
+      return {}
     }
   },
   watch: {
-    validPlan (newValue) {
-      if (newValue === true) {
-        let hardwareOptions = {
-          hardwareWallets: this.hardwareWallets,
-          hardwareWalletSupportingDesktop: this.hardwareWalletSupportingDesktop,
-          desktopKeys: this.desktopKeys,
-          phonesOrTabletKeys: this.phonesOrTabletKeys
-        }
-        this.$emit('updatePlanOptions', hardwareOptions)
+    validPlan (newOptions) {
+      if (JSON.stringify(newOptions) !== JSON.stringify(this.hardwareOptions)) {
+        this.$emit('updatePlanOptions', newOptions)
       }
     }
   }
