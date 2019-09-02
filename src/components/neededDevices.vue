@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  props: ['hardwareOptions', 'disabled'],
+  props: ['hardwareOptions', 'disabled', 'hardwareWalletsChecker'],
   data: () => ({
     neededDevices: null,
     hardwareKeys: null,
@@ -56,8 +56,13 @@ export default {
     neededDevices (newValue) {
       this.$emit('updateNeededDevices', newValue)
     },
-    hardwareOptions (newval) {
+    hardwareOptions (newval, oldval) {
       this.rehydrate(newval)
+    },
+    hardwareWalletsChecker (newval, oldval) {
+      if (newval < oldval && (newval < this.neededDevices)) {
+        this.neededDevices = newval
+      }
     }
   },
   created: function () {

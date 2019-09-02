@@ -42,6 +42,7 @@
     v-bind:neededDevices="neededDevices"
     v-bind:hardwareOptions="localhardwareOptions"
     v-bind:disabled="neededDevicesDisabled"
+    v-bind:hardwareWalletsChecker="hardwareWallets"
     v-on:updateNeededDevices='updateNeededDevices'
     />
 
