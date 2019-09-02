@@ -4,8 +4,16 @@
         <v-card-text>
 
           <p class="mb-5 display-1">Plan Overview</p>
-          <p class="mb-5 title">Hardware Wallets</p>
-          <p class="mb-5 title">Phone Wallets</p>
+          <p class="title">Hardware Wallets</p>
+          {{hardwareOptions.hardwareWallets}}
+          <p class="title">Hardware Wallets Supporting Desktops</p>
+          {{hardwareOptions.hardwareWalletSupportingDesktop}}
+          <p class="title">Phone/Tablet Wallets</p>
+          {{hardwareOptions.phonesOrTabletKeys}}
+          <p class="title">Desktop Wallets</p>
+          {{hardwareOptions.desktopKeys}}
+          <p class="title">Needed Devices</p>
+          {{hardwareOptions.neededDevices}}
 
         </v-card-text>
         </v-flex>
@@ -14,18 +22,15 @@
 
 <script>
 export default {
+  props: ['hardwareOptions'],
   data: () => ({
 
   }),
   computed: {
   },
   watch: {
-    localneededSigs (newValue) {
-      this.$emit('updateneededDevices', newValue)
-    }
   },
   created () {
-  },
-  props: ['neededSigs', 'hardwareOptions']
+  }
 }
 </script>

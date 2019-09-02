@@ -3,7 +3,9 @@
     <v-alert type="info">
       {{advacnedWarning}}
     </v-alert>
-    <p class="mb-3 title">How Many Devices Will Be Required for a Transaction?</p>
+    <p class="mb-3 title">
+      How Many Devices Will Be Required for a Transaction?
+    </p>
     <v-select
     class="mb-2"
     :items="neededDevicessDropDown"
@@ -25,7 +27,8 @@ export default {
   computed: {
     neededDevicessDropDown () {
       const options = []
-      for (let i = this.minNumberNeededDevices; i < this.hardWareKeys + 1; i++) {
+      for (let i = this.minNumberNeededDevices; i <
+        this.hardWareKeys + 1; i++) {
         options.push(i)
       }
       return options
