@@ -1,50 +1,60 @@
 <template>
+<v-flex xs10 offset-xs1>
+  <v-card-text>
+    <v-alert type="error" v-if="!minDevicesAchieved && allChosen">
+      {{minDevicesWarning}}
+    </v-alert>
+    <p class="mb-5 headline">What Hardware do you plan to Use?</p>
 
-      <v-flex xs10 offset-xs1>
-        <v-card-text>
-          <v-alert type="error" v-if="!minDevicesAchieved && allChosen">
-            {{minDevicesWarning}}
-          </v-alert>
-          <p class="mb-5 headline">What Hardware do you plan to Use?</p>
+    <v-select
+    class="my-2"
+    :items="hardwareWalletdropdown"
+    label="Hardware Wallets"
+    v-model="hardwareWallets"
+    />
 
-          <v-select
-          class="my-2"
-          :items="hardwareWalletdropdown"
-          label="Hardware Wallets"
-          v-model="hardwareWallets"
-          ></v-select>
+    <v-select
+    class="my-2"
+    :items="hardwareWalletSupportingDropdown"
+    label="Hardware Wallet Desktops"
+    v-model="hardwareWalletSupportingDesktop"
+    v-bind:disabled="desktopHardwareWalletDisabled"
+    />
 
-          <v-select
-          class="my-2"
-          :items="hardwareWalletSupportingDropdown"
-          label="Hardware Wallet Desktops"
-          v-model="hardwareWalletSupportingDesktop"
-          v-bind:disabled="desktopHardwareWalletDisabled"
-          ></v-select>
+    <v-select
+    class="my-2"
+    :items="desktopDropdown"
+    label="Desktops"
+    v-bind:disabled="desktopDisabled"
+    v-model="desktopKeys"
+    />
 
-          <v-select
-          class="my-2"
-          :items="desktopDropdown"
-          label="Desktops"
-          v-bind:disabled="desktopDisabled"
-          v-model="desktopKeys"
-          ></v-select>
+    <v-select
+    class="my-2"
+    :items="phoneAndTabletDropdown"
+    label="Phones and Tablets"
+    v-bind:disabled="phoneAndTabletDisabled"
+    v-model="phonesOrTabletKeys"
+    ></v-select>
 
-          <v-select
-          class="my-2"
-          :items="phoneAndTabletDropdown"
-          label="Phones and Tablets"
-          v-bind:disabled="phoneAndTabletDisabled"
-          v-model="phonesOrTabletKeys"
-          ></v-select>
+  </v-card-text>
+  <neededDevices v-if='hardwareAdvancedOption'
+    v-bind:neededDevices="neededDevices"
+    v-bind:hardwareOptions="localhardwareOptions"
+    v-bind:disabled="neededDevicesDisabled"
+    v-on:updateNeededDevices='updateNeededDevices'
+    />
 
-        </v-card-text>
-        </v-flex>
+</v-flex>
 </template>
 
 <script>
+import neededDevices from '@/components/neededDevices.vue'
 export default {
-  props: ['hardwareOptions'],
+  components: {
+    neededDevices
+  },
+  props: ['hardwareOptions', 'hardwareAdvancedOption'],
   data: () => ({
     totalkeysAllowed: 8,
     minKeyDevices: 3,
@@ -52,17 +62,23 @@ export default {
     hardwareWallets: null,
     hardwareWalletSupportingDesktop: null,
     desktopKeys: null,
-    phonesOrTabletKeys: null
+    phonesOrTabletKeys: null,
+    neededDevices: null
   }),
   created () {
     if (Object.keys(this.hardwareOptions).length !== 0) {
       this.hardwareWallets = this.hardwareOptions.hardwareWallets
       this.desktopKeys = this.hardwareOptions.desktopKeys
       this.phonesOrTabletKeys = this.hardwareOptions.phonesOrTabletKeys
-      this.hardwareWalletSupportingDesktop = this.hardwareOptions.hardwareWalletSupportingDesktop
+      this.hardwareWalletSupportingDesktop =
+      this.hardwareOptions.hardwareWalletSupportingDesktop
+      this.neededDevices = this.hardwareOptions.neededDevices
     }
   },
   methods: {
+    updateNeededDevices (newNeededDevices) {
+      this.neededDevices = newNeededDevices
+    }
   },
   computed: {
     availableSoftwareKeys: function () {
@@ -70,9 +86,13 @@ export default {
       this.desktopKeys - this.phonesOrTabletKeys - 1
       return availKeys
     },
+    reccommendedNeededKeys: function () {
+      return this.hardwareWallets
+    },
     hardwareWalletdropdown: function () {
       let options = []
-      for (let i = 2; i < this.totalkeysAllowed + this.hardwareWallets + 1; i++) {
+      for (let i = 2; i < this.totalkeysAllowed + this.hardwareWallets + 1;
+        i++) {
         options.push(i)
       }
       return options
@@ -86,14 +106,16 @@ export default {
     },
     desktopDropdown: function () {
       let options = []
-      for (let i = 0; i < this.availableSoftwareKeys + this.desktopKeys + 1; i++) {
+      for (let i = 0; i < this.availableSoftwareKeys +
+        this.desktopKeys + 1; i++) {
         options.push(i)
       }
       return options
     },
     phoneAndTabletDropdown: function () {
       let options = []
-      for (let i = 0; i < this.availableSoftwareKeys + this.phonesOrTabletKeys + 1; i++) {
+      for (let i = 0; i < this.availableSoftwareKeys + this.phonesOrTabletKeys +
+         1; i++) {
         options.push(i)
       }
       return options
@@ -116,11 +138,19 @@ export default {
       }
       return true
     },
+    neededDevicesDisabled: function () {
+      if (this.phonesOrTabletKeys !== null) {
+        return false
+      }
+      return true
+    },
     allChosen: function () {
       if (this.hardwareWallets !== null &&
         this.hardwareWalletSupportingDesktop !== null &&
         this.desktopKeys !== null &&
-        this.phonesOrTabletKeys !== null
+        this.phonesOrTabletKeys !== null &&
+        ((this.neededDevices !== null &&
+          this.hardwareAdvancedOption) || !this.hardwareAdvancedOption)
       ) {
         return true
       } return false
@@ -131,24 +161,32 @@ export default {
         return true
       } return false
     },
+    localhardwareOptions: function () {
+      let devicesNeeded
+      if (this.hardwareAdvancedOption) {
+        devicesNeeded = this.neededDevices
+      } else {
+        devicesNeeded = this.reccommendedNeededKeys
+      }
+      return {
+        hardwareWallets: this.hardwareWallets,
+        desktopKeys: this.desktopKeys,
+        phonesOrTabletKeys: this.phonesOrTabletKeys,
+        hardwareWalletSupportingDesktop: this.hardwareWalletSupportingDesktop,
+        hardwareAdvancedOption: this.hardwareAdvancedOption,
+        neededDevices: devicesNeeded
+      }
+    },
     validPlan: function () {
       if (this.allChosen && this.minDevicesAchieved) {
-        let hardwareOptionsValid = {
-          hardwareWallets: this.hardwareWallets,
-          desktopKeys: this.desktopKeys,
-          phonesOrTabletKeys: this.phonesOrTabletKeys,
-          hardwareWalletSupportingDesktop: this.hardwareWalletSupportingDesktop
-        }
-        return hardwareOptionsValid
+        return this.localhardwareOptions
       }
       return {}
     }
   },
   watch: {
     validPlan (newOptions) {
-      if (JSON.stringify(newOptions) !== JSON.stringify(this.hardwareOptions)) {
-        this.$emit('updatePlanOptions', newOptions)
-      }
+      this.$emit('updatePlanOptions', newOptions)
     }
   }
 }

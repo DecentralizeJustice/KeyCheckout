@@ -7,7 +7,6 @@
           <p class="mb-5 title">Hardware Wallets</p>
           <p class="mb-5 title">Phone Wallets</p>
 
-
         </v-card-text>
         </v-flex>
 

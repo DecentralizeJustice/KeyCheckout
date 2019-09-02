@@ -1,33 +1,30 @@
 <template>
-
-      <v-flex xs10 offset-xs1>
-        <v-card-text>
-
-          <p class="mb-5 title">How Many Devices Will Be Required for a Transaction?</p>
-
-          <v-select
-          class="my-2"
-          :items="neededDevicessDropDown"
-          label="Needed Devices"
-          v-model="localneededDevices"
-          ></v-select>
-        </v-card-text>
-        </v-flex>
-
+  <v-card-text>
+    <v-alert type="info">
+      {{advacnedWarning}}
+    </v-alert>
+    <p class="mb-3 title">How Many Devices Will Be Required for a Transaction?</p>
+    <v-select
+    class="mb-2"
+    :items="neededDevicessDropDown"
+    label="Needed Devices"
+    v-model="neededDevices"
+    v-bind:disabled="disabled"
+    ></v-select>
+  </v-card-text>
 </template>
 
 <script>
 export default {
+  props: ['hardwareOptions', 'disabled'],
   data: () => ({
-    totalKeys: null,
-    localneededDevices: null,
-    softwareKeys: null,
-    hardwareKeys: null
-
+    neededDevices: null,
+    hardwareKeys: null,
+    advacnedWarning: 'You are using Advanced Settings. Make Informed Decisions.'
   }),
   computed: {
     neededDevicessDropDown () {
-      let options = []
+      const options = []
       for (let i = this.minNumberNeededDevices; i < this.hardWareKeys + 1; i++) {
         options.push(i)
       }
@@ -38,25 +35,33 @@ export default {
         return 2
       }
       return this.softwareKeys + 1
+    },
+    totalKeys () {
+      return this.hardwareOptions.hardwareWallets +
+      this.hardwareOptions.desktopKeys +
+      this.hardwareOptions.phonesOrTabletKeys
+    },
+    softwareKeys () {
+      return this.hardwareOptions.desktopKeys +
+      this.hardwareOptions.phonesOrTabletKeys
+    }
+  },
+  methods: {
+    rehydrate (hardwareOptions) {
+      this.neededDevices = hardwareOptions.neededDevices
+      this.hardWareKeys = hardwareOptions.hardwareWallets
     }
   },
   watch: {
-    localneededDevices (newValue) {
-      this.$emit('updateneededDevices', newValue)
+    neededDevices (newValue) {
+      this.$emit('updateNeededDevices', newValue)
+    },
+    hardwareOptions (newval) {
+      this.rehydrate(newval)
     }
   },
-  created () {
-    this.localneededDevices = this.neededDevices
-
-    this.totalKeys = this.hardwareOptions.hardwareWallets +
-    this.hardwareOptions.desktopKeys +
-    this.hardwareOptions.phonesOrTabletKeys
-
-    this.hardWareKeys = this.hardwareOptions.hardwareWallets
-
-    this.softwareKeys = this.hardwareOptions.desktopKeys +
-    this.hardwareOptions.phonesOrTabletKeys
-  },
-  props: ['neededDevices', 'hardwareOptions']
+  created: function () {
+    this.rehydrate(this.hardwareOptions)
+  }
 }
 </script>

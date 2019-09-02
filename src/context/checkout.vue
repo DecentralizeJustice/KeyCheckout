@@ -5,19 +5,23 @@
         <stepper class="mt-5" v-bind:currentSection="currentSection"/>
       </v-flex>
       <v-flex xs8>
-          <v-card
-            class="mx-auto"
-          >
+        <v-card
+          class="mx-auto"
+        >
 
-      <component v-bind:hardwareOptions="hardwareOptions" v-bind:is="currentMain"
-      v-on:updatePlanOptions="updateHardware" v-on:updateneededDevices="updateneededDevices"
-      v-bind:neededDevices="neededDevices">
-      </component>
+          <component v-bind:hardwareOptions="planOptions"
+          v-bind:is="currentMain"
+          v-on:updatePlanOptions="updateHardware"
+          v-bind:hardwareAdvancedOption='hardwareAdvancedOption'>
+          </component>
 
-      <bottomNav v-on:change="updateStep" v-bind:currentSection="currentSection"
-      v-bind:continueDisabled='continueDisabled'/>
-    </v-card>
-</v-flex>
+          <bottomNav v-on:change="updateStep"
+          v-on:changeAdvancedOptions=
+          "hardwareAdvancedOption = !hardwareAdvancedOption"
+          v-bind:currentSection="currentSection"
+          v-bind:continueDisabled='continueDisabled'/>
+        </v-card>
+    </v-flex>
     </v-layout>
   </v-container>
 
@@ -28,11 +32,11 @@ import stepper from '@/components/stepper.vue'
 import bottomNav from '@/components/bottomNav.vue'
 export default {
   data: () => ({
-    componentList: ['hardware', 'neededDevices', 'confirm', 'pay'],
+    componentList: ['hardware', 'confirm', 'pay'],
     currentSection: 0,
-    hardwareOptions: {
+    planOptions: {
     },
-    neededDevices: null
+    hardwareAdvancedOption: false
   }),
   components: {
     stepper,
@@ -42,7 +46,7 @@ export default {
     continueDisabled () {
       switch (this.currentSection) {
         case 0:
-          if (Object.keys(this.hardwareOptions).length !== 0) {
+          if (Object.keys(this.planOptions).length !== 0) {
             return false
           }
           break
@@ -53,11 +57,9 @@ export default {
           break
         case 2:
           return false
-          break
         default:
           return true
       }
-
       return true
     },
     currentMain () {
@@ -74,13 +76,18 @@ export default {
         this.currentSection -= 1
       }
     },
-    updateHardware (newHardwareOptions) {
-      this.hardwareOptions = newHardwareOptions
-      this.neededDevices = null
+    updateHardwareAdvancedOption () {
+      if (Object.keys(this.planOptions).length !== 0) {
+        this.hardwareAdvancedOption = this.planOptions.hardwareAdvancedOption
+      }
     },
-    updateneededDevices (newSigNeeded) {
-      this.neededDevices = newSigNeeded
+    updateHardware (newHardwareOptions) {
+      this.planOptions = newHardwareOptions
+      this.updateHardwareAdvancedOption()
     }
+  },
+  created: function () {
+    this.updateHardwareAdvancedOption()
   }
 }
 </script>

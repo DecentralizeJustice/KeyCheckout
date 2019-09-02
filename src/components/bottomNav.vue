@@ -8,6 +8,14 @@
             <v-icon>mdi-help</v-icon>
           </v-btn>
           <v-btn
+            color="orange"
+            text
+            v-show='advancedAvailable'
+            v-on:click="toggleAdvanced"
+          >
+            <v-icon>mdi-wrench</v-icon>
+          </v-btn>
+          <v-btn
             text
             color="red"
             v-on:click="goBack"
@@ -39,6 +47,9 @@ export default {
     },
     goBack () {
       this.$emit('change', 'back')
+    },
+    toggleAdvanced () {
+      this.$emit('changeAdvancedOptions')
     }
   },
   computed: {
@@ -48,6 +59,12 @@ export default {
       } else {
         return false
       }
+    },
+    advancedAvailable () {
+      if (this.currentSection === 0) {
+        return true
+      }
+      return false
     }
   }
 }
