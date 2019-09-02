@@ -91,7 +91,7 @@ export default {
     },
     hardwareWalletdropdown: function () {
       let options = []
-      for (let i = 2; i < this.totalkeysAllowed + this.hardwareWallets + 1;
+      for (let i = 2; i < this.totalkeysAllowed + 1;
         i++) {
         options.push(i)
       }
@@ -187,6 +187,19 @@ export default {
   watch: {
     validPlan (newOptions) {
       this.$emit('updatePlanOptions', newOptions)
+    },
+    hardwareWallets (newOptions, oldOptions) {
+      if (newOptions < oldOptions &&
+        (this.desktopKeys + this.phonesOrTabletKeys > newOptions) &&
+          (this.desktopKeys !== null && this.phonesOrTabletKeys !== null)) {
+        this.desktopKeys = 0
+        this.phonesOrTabletKeys = 1
+      }
+      if (newOptions < oldOptions &&
+        (this.hardwareWalletSupportingDesktop > newOptions) &&
+        this.hardwareWalletSupportingDesktop !== null) {
+        this.hardwareWalletSupportingDesktop = newOptions
+      }
     }
   }
 }
