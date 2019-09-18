@@ -15,14 +15,6 @@
 
     <v-select
     class="my-2"
-    :items="hardwareWalletSupportingDropdown"
-    label="Hardware Wallet Desktops"
-    v-model="hardwareWalletSupportingDesktop"
-    v-bind:disabled="desktopHardwareWalletDisabled"
-    />
-
-    <v-select
-    class="my-2"
     :items="desktopDropdown"
     label="Desktops"
     v-bind:disabled="desktopDisabled"
@@ -61,7 +53,6 @@ export default {
     minKeyDevices: 3,
     minDevicesWarning: 'You Must Use Atleast 3 Devices',
     hardwareWallets: null,
-    hardwareWalletSupportingDesktop: null,
     desktopKeys: null,
     phonesOrTabletKeys: null,
     neededDevices: null
@@ -71,8 +62,6 @@ export default {
       this.hardwareWallets = this.hardwareOptions.hardwareWallets
       this.desktopKeys = this.hardwareOptions.desktopKeys
       this.phonesOrTabletKeys = this.hardwareOptions.phonesOrTabletKeys
-      this.hardwareWalletSupportingDesktop =
-      this.hardwareOptions.hardwareWalletSupportingDesktop
       this.neededDevices = this.hardwareOptions.neededDevices
     }
   },
@@ -83,7 +72,7 @@ export default {
   },
   computed: {
     availableSoftwareKeys: function () {
-      let availKeys = this.hardwareWallets -
+      const availKeys = this.hardwareWallets -
       this.desktopKeys - this.phonesOrTabletKeys - 1
       return availKeys
     },
@@ -91,22 +80,15 @@ export default {
       return this.hardwareWallets
     },
     hardwareWalletdropdown: function () {
-      let options = []
+      const options = []
       for (let i = 2; i < this.totalkeysAllowed + 1;
         i++) {
         options.push(i)
       }
       return options
     },
-    hardwareWalletSupportingDropdown: function () {
-      let options = []
-      for (let i = 1; i < this.hardwareWallets + 1; i++) {
-        options.push(i)
-      }
-      return options
-    },
     desktopDropdown: function () {
-      let options = []
+      const options = []
       for (let i = 0; i < this.availableSoftwareKeys +
         this.desktopKeys + 1; i++) {
         options.push(i)
@@ -114,21 +96,15 @@ export default {
       return options
     },
     phoneAndTabletDropdown: function () {
-      let options = []
+      const options = []
       for (let i = 0; i < this.availableSoftwareKeys + this.phonesOrTabletKeys +
          1; i++) {
         options.push(i)
       }
       return options
     },
-    desktopHardwareWalletDisabled: function () {
-      if (this.hardwareWallets !== null) {
-        return false
-      }
-      return true
-    },
     desktopDisabled: function () {
-      if (this.hardwareWalletSupportingDesktop !== null) {
+      if (this.hardwareWallets !== null) {
         return false
       }
       return true
@@ -147,7 +123,6 @@ export default {
     },
     allChosen: function () {
       if (this.hardwareWallets !== null &&
-        this.hardwareWalletSupportingDesktop !== null &&
         this.desktopKeys !== null &&
         this.phonesOrTabletKeys !== null &&
         ((this.neededDevices !== null &&
@@ -173,7 +148,6 @@ export default {
         hardwareWallets: this.hardwareWallets,
         desktopKeys: this.desktopKeys,
         phonesOrTabletKeys: this.phonesOrTabletKeys,
-        hardwareWalletSupportingDesktop: this.hardwareWalletSupportingDesktop,
         hardwareAdvancedOption: this.hardwareAdvancedOption,
         neededDevices: devicesNeeded
       }
@@ -195,11 +169,6 @@ export default {
           (this.desktopKeys !== null && this.phonesOrTabletKeys !== null)) {
         this.desktopKeys = 0
         this.phonesOrTabletKeys = 1
-      }
-      if (newOptions < oldOptions &&
-        (this.hardwareWalletSupportingDesktop > newOptions) &&
-        this.hardwareWalletSupportingDesktop !== null) {
-        this.hardwareWalletSupportingDesktop = newOptions
       }
     }
   }

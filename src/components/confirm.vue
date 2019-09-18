@@ -6,8 +6,6 @@
           <p class="mb-5 display-1">Plan Overview</p>
           <p class="title">Hardware Wallets</p>
           {{hardwareOptions.hardwareWallets}}
-          <p class="title">Hardware Wallets Supporting Desktops</p>
-          {{hardwareOptions.hardwareWalletSupportingDesktop}}
           <p class="title">Phone/Tablet Wallets</p>
           {{hardwareOptions.phonesOrTabletKeys}}
           <p class="title">Desktop Wallets</p>
