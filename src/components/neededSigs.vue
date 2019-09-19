@@ -4,13 +4,13 @@
       {{advancedWarning}}
     </v-alert>
     <p class="mb-3 title">
-      How Many Devices Will Be Required for a Transaction?
+      How Many Signatures Will Be Required for a Transaction?
     </p>
     <v-select
     class="mb-2"
-    :items="neededDevicessDropDown"
-    label="Needed Devices"
-    v-model="neededDevices"
+    :items="neededSigssDropDown"
+    label="Needed Signatures"
+    v-model="neededSigs"
     v-bind:disabled="disabled"
     ></v-select>
   </v-card-text>
@@ -18,15 +18,15 @@
 
 <script>
 export default {
-  props: ['hardwareOptions', 'disabled', 'minNumberNeededDevices'],
+  props: ['hardwareOptions', 'disabled', 'minNumberneededSigs'],
   data: () => ({
-    neededDevices: null,
+    neededSigs: null,
     advancedWarning: 'You are using Advanced Settings. Make Informed Decisions.'
   }),
   computed: {
-    neededDevicessDropDown () {
+    neededSigssDropDown () {
       const options = []
-      for (let i = this.minNumberNeededDevices; i <
+      for (let i = this.minNumberneededSigs; i <
         this.hardwareOptions.hardwareWallets + 1; i++) {
         options.push(i)
       }
@@ -35,12 +35,12 @@ export default {
   },
   methods: {
     rehydrate (hardwareOptions) {
-      this.neededDevices = hardwareOptions.neededDevices
+      this.neededSigs = hardwareOptions.neededSigs
     }
   },
   watch: {
-    neededDevices (newValue) {
-      this.$emit('updateNeededDevices', newValue)
+    neededSigs (newValue) {
+      this.$emit('updateneededSigs', newValue)
     },
     hardwareOptions (newval, oldval) {
       this.rehydrate(newval)

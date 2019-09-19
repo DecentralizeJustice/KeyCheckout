@@ -51,10 +51,7 @@ export default {
           }
           break
         case 1:
-          if (this.neededDevices !== null) {
-            return false
-          }
-          break
+          return false
         case 2:
           return false
         default:

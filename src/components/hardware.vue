@@ -30,22 +30,22 @@
     ></v-select>
 
   </v-card-text>
-  <neededDevices v-if='hardwareAdvancedOption'
-    v-bind:neededDevices="neededDevices"
-    v-bind:hardwareOptions="localhardwareOptions"
-    v-bind:disabled="neededDevicesDisabled"
-    v-on:updateNeededDevices='updateNeededDevices'
-    v-bind:minNumberNeededDevices='minNumberNeededDevices'
+  <neededSigs v-if='hardwareAdvancedOption'
+    v-bind:neededSigs="neededSigs"
+    v-bind:hardwareOptions="hardwareOptions"
+    v-bind:disabled="neededSigsDisabled"
+    v-on:updateneededSigs='updateneededSigs'
+    v-bind:minNumberneededSigs='minNumberneededSigs'
     />
 
 </v-flex>
 </template>
 
 <script>
-import neededDevices from '@/components/neededDevices.vue'
+import neededSigs from '@/components/neededSigs.vue'
 export default {
   components: {
-    neededDevices
+    neededSigs
   },
   props: ['hardwareOptions', 'hardwareAdvancedOption'],
   data: () => ({
@@ -56,19 +56,19 @@ export default {
     hardwareWallets: null,
     desktops: null,
     phonesOrTabletKeys: null,
-    neededDevices: null
+    neededSigs: null
   }),
   created () {
     if (Object.keys(this.hardwareOptions).length !== 0) {
       this.hardwareWallets = this.hardwareOptions.hardwareWallets
       this.desktops = this.hardwareOptions.desktops
       this.phonesOrTabletKeys = this.hardwareOptions.phonesOrTabletKeys
-      this.neededDevices = this.hardwareOptions.neededDevices
+      this.neededSigs = this.hardwareOptions.neededSigs
     }
   },
   methods: {
-    updateNeededDevices (newNeededDevices) {
-      this.neededDevices = newNeededDevices
+    updateneededSigs (newneededSigs) {
+      this.neededSigs = newneededSigs
     }
   },
   computed: {
@@ -77,10 +77,10 @@ export default {
       this.desktopKeys - this.phonesOrTabletKeys - 1
       return availKeys
     },
-    minNumberNeededDevices: function () {
+    minNumberneededSigs: function () {
       return this.desktopKeys + this.phonesOrTabletKeys + 1
     },
-    reccommendedNeededDevices: function () {
+    reccommendedneededSigs: function () {
       return this.hardwareWallets
     },
     desktopKeys: function () {
@@ -122,7 +122,7 @@ export default {
       }
       return true
     },
-    neededDevicesDisabled: function () {
+    neededSigsDisabled: function () {
       if (this.phonesOrTabletKeys !== null) {
         return false
       }
@@ -132,7 +132,7 @@ export default {
       if (this.hardwareWallets !== null &&
         this.desktops !== null &&
         this.phonesOrTabletKeys !== null &&
-        ((this.neededDevices !== null &&
+        ((this.neededSigs !== null &&
           this.hardwareAdvancedOption) || !this.hardwareAdvancedOption)
       ) {
         return true
@@ -147,16 +147,16 @@ export default {
     localhardwareOptions: function () {
       let devicesNeeded
       if (this.hardwareAdvancedOption) {
-        devicesNeeded = this.neededDevices
+        devicesNeeded = this.neededSigs
       } else {
-        devicesNeeded = this.reccommendedNeededDevices
+        devicesNeeded = this.reccommendedneededSigs
       }
       return {
         hardwareWallets: this.hardwareWallets,
         desktops: this.desktops,
         phonesOrTabletKeys: this.phonesOrTabletKeys,
         hardwareAdvancedOption: this.hardwareAdvancedOption,
-        neededDevices: devicesNeeded
+        neededSigs: devicesNeeded
       }
     },
     validPlan: function () {
