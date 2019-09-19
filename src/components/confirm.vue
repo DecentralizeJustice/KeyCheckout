@@ -9,8 +9,8 @@
           <p class="title">Phone/Tablet Wallets</p>
           {{hardwareOptions.phonesOrTabletKeys}}
           <p class="title">Desktop Wallets</p>
-          {{hardwareOptions.desktopKeys}}
-          <p class="title">Needed Devices</p>
+          {{hardwareOptions.desktops-1}}
+          <p class="title">Needed Signatures</p>
           {{hardwareOptions.neededDevices}}
 
         </v-card-text>

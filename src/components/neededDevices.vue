@@ -1,7 +1,7 @@
 <template>
   <v-card-text>
     <v-alert type="info">
-      {{advacnedWarning}}
+      {{advancedWarning}}
     </v-alert>
     <p class="mb-3 title">
       How Many Devices Will Be Required for a Transaction?
@@ -18,41 +18,24 @@
 
 <script>
 export default {
-  props: ['hardwareOptions', 'disabled', 'hardwareWalletsChecker'],
+  props: ['hardwareOptions', 'disabled', 'minNumberNeededDevices'],
   data: () => ({
     neededDevices: null,
-    hardwareKeys: null,
-    advacnedWarning: 'You are using Advanced Settings. Make Informed Decisions.'
+    advancedWarning: 'You are using Advanced Settings. Make Informed Decisions.'
   }),
   computed: {
     neededDevicessDropDown () {
       const options = []
       for (let i = this.minNumberNeededDevices; i <
-        this.hardWareKeys + 1; i++) {
+        this.hardwareOptions.hardwareWallets + 1; i++) {
         options.push(i)
       }
       return options
-    },
-    minNumberNeededDevices () {
-      if (this.hardWareKeys === this.totalKeys) {
-        return 2
-      }
-      return this.softwareKeys + 1
-    },
-    totalKeys () {
-      return this.hardwareOptions.hardwareWallets +
-      this.hardwareOptions.desktopKeys +
-      this.hardwareOptions.phonesOrTabletKeys
-    },
-    softwareKeys () {
-      return this.hardwareOptions.desktopKeys +
-      this.hardwareOptions.phonesOrTabletKeys
     }
   },
   methods: {
     rehydrate (hardwareOptions) {
       this.neededDevices = hardwareOptions.neededDevices
-      this.hardWareKeys = hardwareOptions.hardwareWallets
     }
   },
   watch: {
@@ -61,11 +44,6 @@ export default {
     },
     hardwareOptions (newval, oldval) {
       this.rehydrate(newval)
-    },
-    hardwareWalletsChecker (newval, oldval) {
-      if (newval < oldval && (newval < this.neededDevices)) {
-        this.neededDevices = newval
-      }
     }
   },
   created: function () {

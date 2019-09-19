@@ -18,7 +18,7 @@
     :items="desktopDropdown"
     label="Desktops"
     v-bind:disabled="desktopDisabled"
-    v-model="desktopKeys"
+    v-model="desktops"
     />
 
     <v-select
@@ -34,8 +34,8 @@
     v-bind:neededDevices="neededDevices"
     v-bind:hardwareOptions="localhardwareOptions"
     v-bind:disabled="neededDevicesDisabled"
-    v-bind:hardwareWalletsChecker="hardwareWallets"
     v-on:updateNeededDevices='updateNeededDevices'
+    v-bind:minNumberNeededDevices='minNumberNeededDevices'
     />
 
 </v-flex>
@@ -51,16 +51,17 @@ export default {
   data: () => ({
     totalkeysAllowed: 8,
     minKeyDevices: 3,
-    minDevicesWarning: 'You Must Use Atleast 3 Devices',
+    minDesktopComp: 1,
+    minDevicesWarning: 'You Must Use Atleast 4 Devices',
     hardwareWallets: null,
-    desktopKeys: null,
+    desktops: null,
     phonesOrTabletKeys: null,
     neededDevices: null
   }),
   created () {
     if (Object.keys(this.hardwareOptions).length !== 0) {
       this.hardwareWallets = this.hardwareOptions.hardwareWallets
-      this.desktopKeys = this.hardwareOptions.desktopKeys
+      this.desktops = this.hardwareOptions.desktops
       this.phonesOrTabletKeys = this.hardwareOptions.phonesOrTabletKeys
       this.neededDevices = this.hardwareOptions.neededDevices
     }
@@ -76,8 +77,14 @@ export default {
       this.desktopKeys - this.phonesOrTabletKeys - 1
       return availKeys
     },
-    reccommendedNeededKeys: function () {
+    minNumberNeededDevices: function () {
+      return this.desktopKeys + this.phonesOrTabletKeys + 1
+    },
+    reccommendedNeededDevices: function () {
       return this.hardwareWallets
+    },
+    desktopKeys: function () {
+      return this.desktops - this.minDesktopComp
     },
     hardwareWalletdropdown: function () {
       const options = []
@@ -89,8 +96,8 @@ export default {
     },
     desktopDropdown: function () {
       const options = []
-      for (let i = 0; i < this.availableSoftwareKeys +
-        this.desktopKeys + 1; i++) {
+      for (let i = this.minDesktopComp; i < this.availableSoftwareKeys +
+        this.desktops + 1; i++) {
         options.push(i)
       }
       return options
@@ -98,7 +105,7 @@ export default {
     phoneAndTabletDropdown: function () {
       const options = []
       for (let i = 0; i < this.availableSoftwareKeys + this.phonesOrTabletKeys +
-         1; i++) {
+        1; i++) {
         options.push(i)
       }
       return options
@@ -110,7 +117,7 @@ export default {
       return true
     },
     phoneAndTabletDisabled: function () {
-      if (this.desktopKeys !== null) {
+      if (this.desktops !== null) {
         return false
       }
       return true
@@ -123,7 +130,7 @@ export default {
     },
     allChosen: function () {
       if (this.hardwareWallets !== null &&
-        this.desktopKeys !== null &&
+        this.desktops !== null &&
         this.phonesOrTabletKeys !== null &&
         ((this.neededDevices !== null &&
           this.hardwareAdvancedOption) || !this.hardwareAdvancedOption)
@@ -132,8 +139,8 @@ export default {
       } return false
     },
     minDevicesAchieved: function () {
-      if (this.hardwareWallets + this.desktopKeys +
-        this.phonesOrTabletKeys >= this.minKeyDevices) {
+      if (this.hardwareWallets + this.desktops +
+        this.phonesOrTabletKeys >= this.minKeyDevices + this.minDesktopComp) {
         return true
       } return false
     },
@@ -142,11 +149,11 @@ export default {
       if (this.hardwareAdvancedOption) {
         devicesNeeded = this.neededDevices
       } else {
-        devicesNeeded = this.reccommendedNeededKeys
+        devicesNeeded = this.reccommendedNeededDevices
       }
       return {
         hardwareWallets: this.hardwareWallets,
-        desktopKeys: this.desktopKeys,
+        desktops: this.desktops,
         phonesOrTabletKeys: this.phonesOrTabletKeys,
         hardwareAdvancedOption: this.hardwareAdvancedOption,
         neededDevices: devicesNeeded
@@ -165,10 +172,10 @@ export default {
     },
     hardwareWallets (newOptions, oldOptions) {
       if (newOptions < oldOptions &&
-        (this.desktopKeys + this.phonesOrTabletKeys > newOptions) &&
-          (this.desktopKeys !== null && this.phonesOrTabletKeys !== null)) {
-        this.desktopKeys = 0
-        this.phonesOrTabletKeys = 1
+        (this.desktops + this.phonesOrTabletKeys > newOptions) &&
+          (this.desktops !== null && this.phonesOrTabletKeys !== null)) {
+        this.desktops = 1
+        this.phonesOrTabletKeys = 0
       }
     }
   }
